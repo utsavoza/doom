@@ -116,10 +116,19 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
 
 if __name__ == "__main__":
-    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
+    config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
     game = create_game_environment(config_file_path)
     n = game.get_available_buttons_size()
     actions = [list(a) for a in it.product([0, 1], repeat=n)]
+
+    # Set the hyperparameters
+    batch_size = 64
+    lr = 0.00025
+    discount_factor = 0.99
+    memory_size = 10000
+    frame_repeat = 12
+    steps_per_epoch = 2000
+    epsilon_decay = 0.9996
 
     # Use GPU if available
     if torch.cuda.is_available():
@@ -132,12 +141,13 @@ if __name__ == "__main__":
     # Initialize our agent with the set parameters
     agent = DQNAgent(
         action_size=len(actions),
-        lr=0.00025,
-        batch_size=64,
-        memory_size=10000,
-        discount_factor=0.99,
+        lr=lr,
+        batch_size=batch_size,
+        memory_size=memory_size,
+        discount_factor=discount_factor,
         load_model=False,
         device=device,
+        epsilon_decay=epsilon_decay
     )
 
     # Run the training for the set number of epochs
@@ -147,9 +157,9 @@ if __name__ == "__main__":
             game,
             agent,
             actions,
-            num_epochs=2,
-            frame_repeat=12,
-            steps_per_epoch=2000,
+            num_epochs=15,
+            frame_repeat=frame_repeat,
+            steps_per_epoch=steps_per_epoch,
             save_model=True,
             model_path="checkpoints/doom.pth"
         )

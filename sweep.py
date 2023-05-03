@@ -109,7 +109,9 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         wandb.log({
             "epoch": epoch,
             "train_score": train_scores.mean(),
+            "train_score_std": train_scores.std(),
             "test_score": test_scores.mean(),
+            "test_score_std": test_scores.std(),
         })
 
         if save_model:
@@ -123,16 +125,19 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
 
 if __name__ == "__main__":
-    with open("./config.yml") as file:
+    with open("./config/config.yml") as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
     run = wandb.init(config=config)
 
     # Read wandb config from yaml
-    lr = wandb.config.lr
     batch_size = wandb.config.batch_size
-    num_epochs = wandb.config.epochs
+    lr = wandb.config.lr
     discount_factor = wandb.config.discount_factor
+    memory_size = wandb.config.memory_size
+    frame_repeat = wandb.config.frame_repeat
+    steps_per_epoch = wandb.config.steps_per_epoch
+    epsilon_decay = wandb.config.epsilon_decay
 
     # Use GPU if available
     if torch.cuda.is_available():
@@ -142,7 +147,7 @@ if __name__ == "__main__":
         device = torch.device("cpu")
 
     # Setup and create the game environment
-    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
+    config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
     game = create_game_environment(config_file_path)
     n = game.get_available_buttons_size()
     actions = [list(a) for a in it.product([0, 1], repeat=n)]
@@ -152,7 +157,7 @@ if __name__ == "__main__":
         action_size=len(actions),
         lr=lr,
         batch_size=batch_size,
-        memory_size=10000,
+        memory_size=memory_size,
         discount_factor=discount_factor,
         load_model=False,
     )
@@ -164,33 +169,11 @@ if __name__ == "__main__":
             game,
             agent,
             actions,
-            num_epochs=num_epochs,
-            frame_repeat=12,
-            steps_per_epoch=2000,
-            save_model=True,
+            num_epochs=15,
+            frame_repeat=frame_repeat,
+            steps_per_epoch=steps_per_epoch,
+            save_model=False,
             model_path="checkpoints/doom.pth"
         )
         print("======================================")
-        print("Training finished. It's time to watch!")
-
-    # Reinitialize the game with window visible
-    game.close()
-    game.set_window_visible(True)
-    game.set_mode(vzd.Mode.ASYNC_PLAYER)
-    game.init()
-
-    for _ in range(10):
-        game.new_episode()
-        while not game.is_episode_finished():
-            state = preprocess(game.get_state().screen_buffer)
-            best_action_index = agent.get_action(state)
-
-            # Instead of make_action(a, frame_repeat) in order to make the animation smooth
-            game.set_action(actions[best_action_index])
-            for _ in range(12):
-                game.advance_action()
-
-        # Sleep between episodes
-        sleep(1.0)
-        score = game.get_total_reward()
-        print("Total score: ", score)
+        print("Training finished.")
