@@ -34,7 +34,7 @@ def create_game_environment(config_file_path):
     return game
 
 
-def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
+def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=50):
     """Runs a test_episodes_per_epoch episodes and prints the result"""
     test_scores = []
     for _ in range(test_episodes_per_epoch):

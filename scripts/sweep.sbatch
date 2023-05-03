@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=24:00:00
-#SBATCH --gres=gpu:rtx8000:1
+#SBATCH --gres=gpu:1
 #SBATCH --mem=32GB
 #SBATCH --priority=4294967293
 
