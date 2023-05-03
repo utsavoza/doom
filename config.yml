@@ -1,0 +1,19 @@
+program: sweep.py
+method: bayes
+name: vizdoom-sweep-test
+metric:
+  goal: maximize
+  name: test_score
+parameters:
+  batch_size:
+    values: [16, 32, 64]
+  epochs:
+    values: [5, 10, 15]
+  lr:
+    min: 0.0001
+    max: 0.1
+  discount_factor:
+    min: 0.01
+    max: 0.99
+  # memory_size:
+  #   values: [5000, 10000, 20000]

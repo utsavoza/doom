@@ -1,11 +1,13 @@
 import itertools as it
 import os
 from time import time, sleep
+import yaml
 
 import torch
 import vizdoom as vzd
 import skimage
 import numpy as np
+import wandb
 from tqdm import trange
 
 from agent import DQNAgent
@@ -46,6 +48,13 @@ def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
         test_scores.append(reward)
 
     test_scores = np.array(test_scores)
+    print(
+        "Results: mean: {:.1f} +/- {:.1f},".format(
+            test_scores.mean(), test_scores.std()
+        ),
+        "min: %.1f" % test_scores.min(),
+        "max: %.1f" % test_scores.max(),
+    )
     return test_scores
 
 
@@ -89,7 +98,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         agent.update_target_net()
         train_scores = np.array(train_scores)
         print(
-            "Results (Train): mean: {:.1f} +/- {:.1f},".format(
+            "Results: mean: {:.1f} +/- {:.1f},".format(
                 train_scores.mean(), train_scores.std()
             ),
             "min: %.1f," % train_scores.min(),
@@ -97,13 +106,11 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         )
 
         test_scores = test_agent(game, agent, actions, frame_repeat)
-        print(
-            "Results (Test): mean: {:.1f} +/- {:.1f},".format(
-                test_scores.mean(), test_scores.std()
-            ),
-            "min: %.1f" % test_scores.min(),
-            "max: %.1f" % test_scores.max(),
-        )
+        wandb.log({
+            "epoch": epoch,
+            "train_score": train_scores.mean(),
+            "test_score": test_scores.mean(),
+        })
 
         if save_model:
             print("Saving the network weights to:", model_path)
@@ -116,10 +123,16 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
 
 if __name__ == "__main__":
-    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
-    game = create_game_environment(config_file_path)
-    n = game.get_available_buttons_size()
-    actions = [list(a) for a in it.product([0, 1], repeat=n)]
+    with open("./config.yml") as file:
+        config = yaml.load(file, Loader=yaml.FullLoader)
+
+    run = wandb.init(config=config)
+
+    # Read wandb config from yaml
+    lr = wandb.config.lr
+    batch_size = wandb.config.batch_size
+    num_epochs = wandb.config.epochs
+    discount_factor = wandb.config.discount_factor
 
     # Use GPU if available
     if torch.cuda.is_available():
@@ -127,17 +140,21 @@ if __name__ == "__main__":
         torch.backends.cudnn.benchmark = True
     else:
         device = torch.device("cpu")
-    print(f"Using device={device} ...")
+
+    # Setup and create the game environment
+    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
+    game = create_game_environment(config_file_path)
+    n = game.get_available_buttons_size()
+    actions = [list(a) for a in it.product([0, 1], repeat=n)]
 
     # Initialize our agent with the set parameters
     agent = DQNAgent(
         action_size=len(actions),
-        lr=0.00025,
-        batch_size=64,
+        lr=lr,
+        batch_size=batch_size,
         memory_size=10000,
-        discount_factor=0.99,
+        discount_factor=discount_factor,
         load_model=False,
-        device=device,
     )
 
     # Run the training for the set number of epochs
@@ -147,13 +164,12 @@ if __name__ == "__main__":
             game,
             agent,
             actions,
-            num_epochs=2,
+            num_epochs=num_epochs,
             frame_repeat=12,
             steps_per_epoch=2000,
             save_model=True,
             model_path="checkpoints/doom.pth"
         )
-
         print("======================================")
         print("Training finished. It's time to watch!")
 
