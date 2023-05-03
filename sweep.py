@@ -48,13 +48,6 @@ def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
         test_scores.append(reward)
 
     test_scores = np.array(test_scores)
-    print(
-        "Results: mean: {:.1f} +/- {:.1f},".format(
-            test_scores.mean(), test_scores.std()
-        ),
-        "min: %.1f" % test_scores.min(),
-        "max: %.1f" % test_scores.max(),
-    )
     return test_scores
 
 
@@ -98,7 +91,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         agent.update_target_net()
         train_scores = np.array(train_scores)
         print(
-            "Results: mean: {:.1f} +/- {:.1f},".format(
+            "Results (Train): mean: {:.1f} +/- {:.1f},".format(
                 train_scores.mean(), train_scores.std()
             ),
             "min: %.1f," % train_scores.min(),
@@ -106,6 +99,14 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         )
 
         test_scores = test_agent(game, agent, actions, frame_repeat)
+        print(
+            "Results (Test): mean: {:.1f} +/- {:.1f},".format(
+                test_scores.mean(), test_scores.std()
+            ),
+            "min: %.1f" % test_scores.min(),
+            "max: %.1f" % test_scores.max(),
+        )
+
         wandb.log({
             "epoch": epoch,
             "train_score": train_scores.mean(),
@@ -145,6 +146,7 @@ if __name__ == "__main__":
         torch.backends.cudnn.benchmark = True
     else:
         device = torch.device("cpu")
+    print(f"Using device={device} ...")
 
     # Setup and create the game environment
     config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
@@ -159,7 +161,9 @@ if __name__ == "__main__":
         batch_size=batch_size,
         memory_size=memory_size,
         discount_factor=discount_factor,
+        epsilon_decay=epsilon_decay,
         load_model=False,
+        device=device,
     )
 
     # Run the training for the set number of epochs
