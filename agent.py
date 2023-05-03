@@ -41,7 +41,7 @@ class DQNAgent:
             self.epsilon = self.epsilon_min
 
         else:
-            print("Initializing new model")
+            print("Creating new agent ...")
             self.q_net = DuelQNet(action_size).to(device)
             self.target_net = DuelQNet(action_size).to(device)
 
