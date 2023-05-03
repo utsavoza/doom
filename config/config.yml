@@ -1,6 +1,6 @@
 program: sweep.py
 method: bayes
-name: vizdoom-hyperparams-sweep
+name: dqn-hyperparams-sweep
 metric:
   goal: maximize
   name: test_score
