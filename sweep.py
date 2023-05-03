@@ -36,7 +36,6 @@ def create_game_environment(config_file_path):
 
 def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     """Runs a test_episodes_per_epoch episodes and prints the result"""
-    print("\nTesting...")
     test_scores = []
     for _ in range(test_episodes_per_epoch):
         game.new_episode()
@@ -64,7 +63,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         train_scores = []
         global_step = 0
 
-        print("\nEpoch #" + str(epoch + 1))
+        print("\n\nEpoch #" + str(epoch + 1))
 
         for _ in range(steps_per_epoch):
             state = preprocess(game.get_state().screen_buffer)
@@ -91,7 +90,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         agent.update_target_net()
         train_scores = np.array(train_scores)
         print(
-            "Results (Train): mean: {:.1f} +/- {:.1f},".format(
+            "\tResults (Train): mean: {:.1f} +/- {:.1f},".format(
                 train_scores.mean(), train_scores.std()
             ),
             "min: %.1f," % train_scores.min(),
@@ -100,7 +99,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
         test_scores = test_agent(game, agent, actions, frame_repeat)
         print(
-            "Results (Test): mean: {:.1f} +/- {:.1f},".format(
+            "\tResults (Test): mean: {:.1f} +/- {:.1f},".format(
                 test_scores.mean(), test_scores.std()
             ),
             "min: %.1f" % test_scores.min(),
@@ -108,7 +107,6 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         )
 
         wandb.log({
-            "epoch": epoch,
             "train_score": train_scores.mean(),
             "train_score_std": train_scores.std(),
             "test_score": test_scores.mean(),
