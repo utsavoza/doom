@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=vizdoom-hyperparams-sweep
+#SBATCH --job-name=dqn-hyperparams-sweep
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
