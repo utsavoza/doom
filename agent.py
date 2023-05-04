@@ -8,6 +8,7 @@ import numpy as np
 
 from dqn import DuelQNet
 
+
 class DQNAgent:
     def __init__(
         self,

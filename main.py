@@ -116,7 +116,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
 
 if __name__ == "__main__":
-    config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
+    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
     game = create_game_environment(config_file_path)
     n = game.get_available_buttons_size()
     actions = [list(a) for a in it.product([0, 1], repeat=n)]
