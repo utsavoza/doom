@@ -8,6 +8,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=32GB
 #SBATCH --priority=4294967293
+#SBATCH --account=class
 
 module purge;
 

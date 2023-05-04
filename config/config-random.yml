@@ -20,5 +20,5 @@ parameters:
   steps_per_epoch:
     values: [500, 1000, 2000]
   epsilon_decay:
-    min: 0.9000
+    min: 0.9900
     max: 0.9999

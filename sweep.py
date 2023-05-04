@@ -147,7 +147,7 @@ if __name__ == "__main__":
     print(f"Using device={device} ...")
 
     # Setup and create the game environment
-    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
+    config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
     game = create_game_environment(config_file_path)
     n = game.get_available_buttons_size()
     actions = [list(a) for a in it.product([0, 1], repeat=n)]

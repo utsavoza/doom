@@ -46,7 +46,7 @@ class DQNAgent:
             self.q_net = DuelQNet(action_size).to(device)
             self.target_net = DuelQNet(action_size).to(device)
 
-        self.opt = optim.SGD(self.q_net.parameters(), lr=self.lr)
+        self.opt = optim.AdamW(self.q_net.parameters(), lr=self.lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01)
 
     def get_action(self, state):
         if np.random.uniform() < self.epsilon:
