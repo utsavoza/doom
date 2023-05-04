@@ -1,6 +1,6 @@
 program: sweep.py
 method: random
-name: dqn-hyperparams-sweep
+name: dqn-sweep-random
 metric:
   goal: maximize
   name: test_score
