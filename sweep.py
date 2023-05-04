@@ -34,7 +34,7 @@ def create_game_environment(config_file_path):
     return game
 
 
-def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=50):
+def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     """Runs a test_episodes_per_epoch episodes and prints the result"""
     test_scores = []
     for _ in range(test_episodes_per_epoch):
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     print(f"Using device={device} ...")
 
     # Setup and create the game environment
-    config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
+    config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
     game = create_game_environment(config_file_path)
     n = game.get_available_buttons_size()
     actions = [list(a) for a in it.product([0, 1], repeat=n)]
@@ -171,7 +171,7 @@ if __name__ == "__main__":
             game,
             agent,
             actions,
-            num_epochs=15,
+            num_epochs=20,
             frame_repeat=frame_repeat,
             steps_per_epoch=steps_per_epoch,
             save_model=False,
