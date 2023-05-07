@@ -51,8 +51,8 @@ class DoubleDQNAgent():
 
         else:   
             print("Initializing New Model")
-            self.q_net = VanillaQNET(action_size).to(device)
-            self.target_net = VanillaQNET(action_size).to(device)
+            self.q_net = VanillaQNET(action_size).to(self.device)
+            self.target_net = VanillaQNET(action_size).to(self.device)
     
         if optimizer =='SGD':
             self.opt = optim.SGD(self.q_net.parameters(), lr=self.lr)
@@ -65,7 +65,7 @@ class DoubleDQNAgent():
             return random.choice(range(self.action_size))
         else:
             state = np.expand_dims(state, axis=0)
-            state = torch.from_numpy(state).float().to(device)
+            state = torch.from_numpy(state).float().to(self.device)
             action = torch.argmax(self.q_net(state)).item()
             return action
 
@@ -105,12 +105,12 @@ class DoubleDQNAgent():
         # compute the TD-targets using the Double DQN update rule
 
         q_targets = rewards.copy()
-        q_targets[not_dones] = np.add(q_targets[not_dones], self.discount * next_state_values)
+        q_targets[not_dones] = np.add(q_targets[not_dones], self.discount * next_state_values.cpu())
         q_targets = torch.from_numpy(q_targets).float().to(self.device)
 
         # compute the predicted Q-values for the state-action pairs
         idx = row_idx, actions
-        states = torch.from_numpy(states).float().to(device)
+        states = torch.from_numpy(states).float().to(self.device)
         action_values = self.q_net(states)[idx].float().to(self.device)
 
         # compute the TD-errors and update the Q-network
