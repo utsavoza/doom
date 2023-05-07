@@ -184,7 +184,7 @@ if __name__ == "__main__":
 
     # Reinitialize the game with window visible
     game.close()
-    game.set_window_visible(True)
+    game.set_window_visible(False)
     game.set_mode(vzd.Mode.ASYNC_PLAYER)
     game.init()
 
