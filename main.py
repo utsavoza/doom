@@ -49,7 +49,7 @@ def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     return test_scores
 
 
-def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch, save_model, model_path):
+def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch, save_model, model_path, model='ddqn'):
     """
     Trains the DQN Agent by running num_epochs of training episodes.
     Skip frame_repeat number of frames after each action.
@@ -86,7 +86,8 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
             global_step += 1
 
-        if agent == 'ddqn':
+        if model == 'ddqn':
+            print("test")
             agent.update_target_net()
 
         train_scores = np.array(train_scores)
@@ -124,14 +125,14 @@ if __name__ == "__main__":
     actions = [list(a) for a in it.product([0, 1], repeat=n)]
 
     # Set the hyperparameters
-    batch_size = 32
-    lr = 0.005
-    discount_factor = 0.97
+    batch_size = 128
+    lr = 0.006491568748327548
+    discount_factor = 0.8876233928106229
     memory_size = 10000
     frame_repeat = 12
     steps_per_epoch = 2000
-    epsilon_decay = 0.996
-    model = 'ddqn'
+    epsilon_decay = 0.995655176912701
+    model_name = 'ddqn'
 
     # Use GPU if available
     if torch.cuda.is_available():
@@ -142,7 +143,7 @@ if __name__ == "__main__":
     print(f"Using device={device} ...")
 
     # Initialize our agent with the set parameters
-    if model == 'dqn':
+    if model_name == 'dqn':
         agent = DQNAgent(
             action_size=len(actions),
             lr=lr,
@@ -176,7 +177,8 @@ if __name__ == "__main__":
             frame_repeat=frame_repeat,
             steps_per_epoch=steps_per_epoch,
             save_model=True,
-            model_path="checkpoints/doom.pth"
+            model_path="checkpoints/doom.pth",
+            model_name=model_name,
         )
         print("======================================")
         print("Training finished. It's time to watch!")
