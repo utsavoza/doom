@@ -36,7 +36,7 @@ def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     """Runs a test_episodes_per_epoch episodes and prints the result"""
     print("\nTesting...")
     test_scores = []
-    for _ in trange(test_episodes_per_epoch, leave=False):
+    for _ in range(test_episodes_per_epoch):
         game.new_episode()
         while not game.is_episode_finished():
             state = preprocess(game.get_state().screen_buffer)
@@ -49,7 +49,7 @@ def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     return test_scores
 
 
-def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch, save_model, model_path, model='ddqn'):
+def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch, save_model, model_path, model_name='ddqn'):
     """
     Trains the DQN Agent by running num_epochs of training episodes.
     Skip frame_repeat number of frames after each action.
@@ -64,7 +64,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
         print("\nEpoch #" + str(epoch + 1))
 
-        for _ in trange(steps_per_epoch):
+        for _ in range(steps_per_epoch):
             state = preprocess(game.get_state().screen_buffer)
             action = agent.get_action(state)
             reward = game.make_action(actions[action], frame_repeat)
@@ -86,8 +86,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
             global_step += 1
 
-        if model == 'ddqn':
-            print("test")
+        if model_name == 'ddqn':
             agent.update_target_net()
 
         train_scores = np.array(train_scores)
