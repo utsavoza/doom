@@ -173,7 +173,7 @@ if __name__ == "__main__":
             game,
             agent,
             actions,
-            num_epochs=15,
+            num_epochs=200,
             frame_repeat=frame_repeat,
             steps_per_epoch=steps_per_epoch,
             save_model=True,

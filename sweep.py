@@ -10,7 +10,7 @@ import numpy as np
 import wandb
 from tqdm import trange
 
-from agent import DQNAgent
+from agents import *
 
 
 def preprocess(img):
