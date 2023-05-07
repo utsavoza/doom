@@ -6,10 +6,10 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
-from dqn import DuelQNet
+from models.ddqn import DuelQNet
 
 
-class DQNAgent:
+class DDQNAgent:
     def __init__(
         self,
         action_size,

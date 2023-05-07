@@ -54,5 +54,4 @@ class DuelQNet(nn.Module):
         x = state_value + (
             advantage_values - advantage_values.mean(dim=1).reshape(-1, 1)
         )
-
         return x

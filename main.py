@@ -8,7 +8,7 @@ import skimage
 import numpy as np
 from tqdm import trange
 
-from agent import DQNAgent
+from agents import DQNAgent, DDQNAgent
 
 
 def preprocess(img):
@@ -86,7 +86,9 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
             global_step += 1
 
-        agent.update_target_net()
+        if agent == 'ddqn':
+            agent.update_target_net()
+
         train_scores = np.array(train_scores)
         print(
             "Results (Train): mean: {:.1f} +/- {:.1f},".format(
@@ -129,6 +131,7 @@ if __name__ == "__main__":
     frame_repeat = 12
     steps_per_epoch = 2000
     epsilon_decay = 0.996
+    model = 'ddqn'
 
     # Use GPU if available
     if torch.cuda.is_available():
@@ -139,16 +142,28 @@ if __name__ == "__main__":
     print(f"Using device={device} ...")
 
     # Initialize our agent with the set parameters
-    agent = DQNAgent(
-        action_size=len(actions),
-        lr=lr,
-        batch_size=batch_size,
-        memory_size=memory_size,
-        discount_factor=discount_factor,
-        load_model=False,
-        device=device,
-        epsilon_decay=epsilon_decay
-    )
+    if model == 'dqn':
+        agent = DQNAgent(
+            action_size=len(actions),
+            lr=lr,
+            batch_size=batch_size,
+            memory_size=memory_size,
+            discount_factor=discount_factor,
+            load_model=False,
+            device=device,
+            epsilon_decay=epsilon_decay
+        )
+    else:
+        agent = DDQNAgent(
+            action_size=len(actions),
+            lr=lr,
+            batch_size=batch_size,
+            memory_size=memory_size,
+            discount_factor=discount_factor,
+            load_model=False,
+            device=device,
+            epsilon_decay=epsilon_decay
+        )
 
     # Run the training for the set number of epochs
     skip_learning = False
@@ -163,7 +178,6 @@ if __name__ == "__main__":
             save_model=True,
             model_path="checkpoints/doom.pth"
         )
-
         print("======================================")
         print("Training finished. It's time to watch!")
 

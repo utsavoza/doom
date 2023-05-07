@@ -37,7 +37,7 @@ def create_game_environment(config_file_path):
 def test_agent(game, agent, actions, frame_repeat, test_episodes_per_epoch=10):
     """Runs a test_episodes_per_epoch episodes and prints the result"""
     test_scores = []
-    for _ in range(test_episodes_per_epoch):
+    for _ in trange(test_episodes_per_epoch):
         game.new_episode()
         while not game.is_episode_finished():
             state = preprocess(game.get_state().screen_buffer)
@@ -65,7 +65,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
         print("\n\nEpoch #" + str(epoch + 1))
 
-        for _ in range(steps_per_epoch):
+        for _ in trange(steps_per_epoch):
             state = preprocess(game.get_state().screen_buffer)
             action = agent.get_action(state)
             reward = game.make_action(actions[action], frame_repeat)
@@ -124,7 +124,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
 
 
 if __name__ == "__main__":
-    with open("./config/config.yml") as file:
+    with open("./config/config-random.yml") as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
     run = wandb.init(config=config)
