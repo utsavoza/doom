@@ -15,10 +15,10 @@ Reinforcement learning is a process in which an agent interacts with an environm
 
 The DQN architecture uses a single neural network to approximate the Q-value function. It takes the current state of the environment as input and outputs the estimated Q-values for all possible actions in that state. The agent selects the action with the highest Q-value to maximize its rewards.
 
-<div align="center"><image width="300" src="./images/dqn.png"></div>
+<div align="center"><image width="400" src="./images/dqn.png"></div>
 
 The Duel DQN architecture is an extension of the DQN architecture that separates the estimation of the state value and action advantage functions. It uses two parallel neural networks: one estimates the state value function, which measures the value of being in a particular state regardless of the action taken, and the other estimates the action advantage function, which measures the advantage of taking a particular action in a particular state over other possible actions. The Q-value function is then computed as the sum of the state value and action advantage functions.
-<div align="center"><image width="300" src="./images/ddqn.png"></div>
+<div align="center"><image width="400" src="./images/ddqn.png"></div>
 
 ## Results
 
