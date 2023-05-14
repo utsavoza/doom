@@ -9,7 +9,7 @@ import numpy as np
 from models.ddqn import DuelQNet
 
 
-class DDQNAgent:
+class DuelDQNAgent:
     def __init__(
         self,
         action_size,
@@ -40,7 +40,6 @@ class DDQNAgent:
             self.q_net = torch.load(model_savefile)
             self.target_net = torch.load(model_savefile)
             self.epsilon = self.epsilon_min
-
         else:
             print("Creating new agent ...")
             self.q_net = DuelQNet(action_size).to(device)
@@ -80,10 +79,8 @@ class DDQNAgent:
         # see https://arxiv.org/abs/1509.06461 for more information on double q learning
         with torch.no_grad():
             next_states = torch.from_numpy(next_states).float().to(self.device)
-            idx = row_idx, np.argmax(self.q_net(
-                next_states).cpu().data.numpy(), 1)
-            next_state_values = self.target_net(
-                next_states).cpu().data.numpy()[idx]
+            idx = row_idx, np.argmax(self.q_net(next_states).cpu().data.numpy(), 1)
+            next_state_values = self.target_net(next_states).cpu().data.numpy()[idx]
             next_state_values = next_state_values[not_dones]
 
         # this defines y = r + discount * max_a q(s', a)

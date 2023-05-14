@@ -1,2 +1,3 @@
-from .ddqn_agent import *
-from .dqn_agent import *
+from .std import *
+from .duel import *
+from .double import *
