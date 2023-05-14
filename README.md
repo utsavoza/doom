@@ -43,6 +43,7 @@ functions, which helps to reduce overestimation of the Q-values and improve the 
 | `out`          | Execution log files |
 | `images`       | Concept diagrams/images  |
 | `models`       | DQN, Double DQN and Duel DQN models |
+| `plots`        | Plots for train and test reward scores |
 | `scenarios`    | ViZDoom game scenario configuration files |
 | `scripts`      | Slurm scripts |
 | `main.py`      | Entry point (Training and Testing) |
