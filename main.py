@@ -117,6 +117,9 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
     game.close()
     return agent, game
 
+def plot(train_scores, test_scores):
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(

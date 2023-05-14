@@ -1,21 +1,17 @@
 <div align="center">
 
-# <b>Value-Based Reinforcement Learning using DQN</b>
+# <b>Optimizing Value-Based Reinforcement Learning using DQN</b>
 
 </div>
 
-The project explores the application of Deep Q-networks (DQNs) for value-based reinforcement learning in the context of
-ViZDoom game environment. The objective is to train an agent to learn to maximize its rewards by making sequential decisions in an environment. This project uses the ViZDoom game environment to demonstrate the effectiveness of DQN in learning policies for the game.
+In this project, we compare the performance of two different architectures of deep Q-networks (DQNs) for value-based reinforcement learning, i.e. **DQN** and **Duel DQN** in the context of ViZDoom game environment.
 
 
 ## Introduction
 
-In reinforcement learning, an agent learns to make decisions by interacting with an environment. In value-based
-reinforcement learning, the agent learns to estimate the value of actions in the current state to maximize its rewards.
-The deep Q-network algorithm combines deep learning and reinforcement learning to approximate the Q-value function,
-which is the expected cumulative reward for taking a specific action in a given state.
+Reinforcement learning is a process in which an agent interacts with an environment to learn how to make decisions. Value-based reinforcement learning involves estimating the value of actions in a given state to maximize rewards. The deep Q-network algorithm combines deep learning and reinforcement learning to approximate the Q-value function, which is the expected cumulative reward for taking a specific action in a given state.
 
-In this project, we compare the performance of two different architectures of deep Q-networks (DQNs) for value-based reinforcement learning: **DQN** and **Duel DQN**.
+## Architecture
 
 The DQN architecture uses a single neural network to approximate the Q-value function. It takes the current state of the environment as input and outputs the estimated Q-values for all possible actions in that state. The agent selects the action with the highest Q-value to maximize its rewards.
 
@@ -36,6 +32,21 @@ optimal policy faster than the DQN agent. This is likely due to the separation o
 functions, which helps to reduce overestimation of the Q-values and improve the stability of the learning process.
 
 **TODO: Update**
+
+## Project Structure
+
+| File/Directory | Description |
+|----------------|-------------|
+| `agents`       | DQN, Double DQN and Duel DQN agents  |
+| `checkpoints`  | Saved model files  |
+| `config`       | W&B Sweep Configuration  |
+| `out`          | Execution log files |
+| `images`       | Concept diagrams/images  |
+| `models`       | DQN, Double DQN and Duel DQN models |
+| `scenarios`    | ViZDoom game scenario configuration files |
+| `scripts`      | Slurm scripts |
+| `main.py`      | Entry point (Training and Testing) |
+| `sweep.py`     | W&B Agent entry point |
 
 ## Usage
 
