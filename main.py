@@ -8,6 +8,7 @@ import vizdoom as vzd
 import skimage
 import numpy as np
 from tqdm import trange
+import matplotlib.pyplot as plt
 
 from agents import DQNAgent, DoubleDQNAgent, DuelDQNAgent
 
@@ -57,6 +58,9 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
     """
 
     start_time = time()
+    train_reward_scores = []
+    test_reward_scores = []
+
 
     for epoch in range(num_epochs):
         game.new_episode()
@@ -98,6 +102,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
             "min: %.1f," % train_scores.min(),
             "max: %.1f," % train_scores.max(),
         )
+        train_reward_scores.append(train_scores.mean())
 
         test_scores = test_agent(game, agent, actions, frame_repeat)
         print(
@@ -107,6 +112,7 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
             "min: %.1f" % test_scores.min(),
             "max: %.1f" % test_scores.max(),
         )
+        test_reward_scores.append(test_scores.mean())
 
         if save_model:
             print("Saving the network weights to:", model_path)
@@ -114,11 +120,22 @@ def train_agent(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch,
         print("Total elapsed time: %.2f minutes" %
               ((time() - start_time) / 60.0))
 
+    plot(train_reward_scores, test_reward_scores, model_name,
+         x=[i for i in range(num_epochs)], y1_label="Train", y2_label="Test")
     game.close()
     return agent, game
 
-def plot(train_scores, test_scores):
 
+def plot(y1, y2, name, x, y1_label, y2_label):
+    plt.figure()
+    if y1 is not None:
+        plt.plot(x, y1, label=y1_label)
+    if y2 is not None:
+        plt.plot(x, y2, label=y2_label)
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("Reward Score")
+    plt.savefig("plots/" + name + ".jpg")
 
 
 def parse_args():
@@ -240,7 +257,7 @@ def run(args):
             frame_repeat=frame_repeat,
             steps_per_epoch=steps_per_epoch,
             save_model=True,
-            model_path="checkpoints/" + checkpoint + ".pth",
+            model_path="checkpoints/" + checkpoint,
             model_name=model_name,
         )
         print("======================================")
@@ -251,6 +268,8 @@ def run(args):
     game.set_window_visible(False)
     game.set_mode(vzd.Mode.ASYNC_PLAYER)
     game.init()
+
+    scores = []
 
     for _ in range(10):
         game.new_episode()
@@ -266,7 +285,11 @@ def run(args):
         # Sleep between episodes
         sleep(1.0)
         score = game.get_total_reward()
+        scores.append(score)
         print("Total score: ", score)
+
+    plot(y1=scores, y2=None, name=model_name + "_validation",
+         x=[i for i in range(10)], y1_label="Validation", y2_label=None)
 
 
 if __name__ == "__main__":
