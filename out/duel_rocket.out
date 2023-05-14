@@ -1,0 +1,23 @@
+WARNING: Could not find any nv files on this host!
+Creating game environment ...
+Game environment initialized ...
+
+Hyperparameters
+	batch_size = 64
+	lr = 0.00025
+	discount_factor = 0.99
+	memory_size = 10000
+	frame_repeat = 12
+	steps_per_epoch = 2000
+	epsilon_decay = 0.9996
+	num_epochs = 50
+	model = duel_dqn
+	skip_learning = False
+	load_model = False
+	checkpoint = duel_rocket
+
+Using device=cpu ...
+Creating new agent ...
+
+Epoch #1
+  0%|          | 0/2000 [00:00<?, ?it/s]  0%|          | 1/2000 [00:00<10:51,  3.07it/s]  0%|          | 4/2000 [00:00<03:03, 10.86it/s]  0%|          | 8/2000 [00:00<01:52, 17.67it/s]  1%|          | 11/2000 [00:00<01:37, 20.44it/s]  1%|          | 14/2000 [00:00<01:29, 22.16it/s]  1%|          | 17/2000 [00:00<01:24, 23.55it/s]  1%|          | 21/2000 [00:01<01:17, 25.64it/s]  1%|          | 24/2000 [00:01<01:15, 26.03it/s]  1%|▏         | 27/2000 [00:01<01:14, 26.33it/s]  2%|▏         | 30/2000 [00:01<01:14, 26.48it/s]  2%|▏         | 33/2000 [00:01<01:13, 26.60it/s]  2%|▏         | 36/2000 [00:01<01:13, 26.68it/s]  2%|▏         | 39/2000 [00:01<01:13, 26.74it/s]
