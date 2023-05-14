@@ -21,7 +21,7 @@ class VanillaAgent():
         epsilon=1,
         epsilon_decay=0.9996,
         epsilon_min=0.1,
-        model_savefile="Vanilla_Doom.pth",
+        model_savefile="checkpoints/Doom_Vanilla.pth",
 
         
     ):
