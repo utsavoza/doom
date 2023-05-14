@@ -95,7 +95,7 @@ To run the code, follow these steps:
 
 1. Clone the repository
     ```bash
-    git clone git@github.com:utsavoza/fuzzy-enigma.git
+    git clone git@github.com:utsavoza/doom.git
     ```
 
 2. Setup and activate the virtual environment
@@ -122,6 +122,12 @@ To run the code, follow these steps:
 ## References
 
 - [Dueling Network Architectures for Deep Reinforcement Learning](https://arxiv.org/pdf/1511.06581.pdf)
+
+
+## Authors
+
+- Rithviik Srinivasan (rs8385)
+- Utsav Oza (ugo1)
 
 ## License
 
